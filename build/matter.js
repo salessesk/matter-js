@@ -1,5 +1,5 @@
 /**
-* matter-js 0.13.0 by @liabru 2017-07-06
+* matter-js 0.13.0 by @liabru 2017-09-13
 * http://brm.io/matter-js/
 * License MIT
 */
@@ -1223,6 +1223,7 @@ module.exports = Composite;
 var Events = _dereq_('../core/Events');
 var Common = _dereq_('../core/Common');
 var Body = _dereq_('./Body');
+var Bounds = _dereq_('../geometry/Bounds');
 
 (function() {
 
@@ -1234,13 +1235,13 @@ var Body = _dereq_('./Body');
      * @return {composite} A new composite
      */
     Composite.create = function(options) {
-        return Common.extend({ 
+        return Common.extend({
             id: Common.nextId(),
             type: 'composite',
             parent: null,
             isModified: false,
-            bodies: [], 
-            constraints: [], 
+            bodies: [],
+            constraints: [],
             composites: [],
             label: 'Composite',
             plugin: {}
@@ -1248,7 +1249,7 @@ var Body = _dereq_('./Body');
     };
 
     /**
-     * Sets the composite's `isModified` flag. 
+     * Sets the composite's `isModified` flag.
      * If `updateParents` is true, all parents will be set (default: false).
      * If `updateChildren` is true, all children will be set (default: false).
      * @method setModified
@@ -1531,7 +1532,7 @@ var Body = _dereq_('./Body');
                 Composite.clear(composite.composites[i], keepStatic, true);
             }
         }
-        
+
         if (keepStatic) {
             composite.bodies = composite.bodies.filter(function(body) { return body.isStatic; });
         } else {
@@ -1617,8 +1618,8 @@ var Body = _dereq_('./Body');
         if (!objects)
             return null;
 
-        object = objects.filter(function(object) { 
-            return object.id.toString() === id.toString(); 
+        object = objects.filter(function(object) {
+            return object.id.toString() === id.toString();
         });
 
         return object.length === 0 ? null : object[0];
@@ -1659,7 +1660,7 @@ var Body = _dereq_('./Body');
     };
 
     /**
-     * Translates all children in the composite by a given vector relative to their current positions, 
+     * Translates all children in the composite by a given vector relative to their current positions,
      * without imparting any velocity.
      * @method translate
      * @param {composite} composite
@@ -1695,7 +1696,7 @@ var Body = _dereq_('./Body');
             var body = bodies[i],
                 dx = body.position.x - point.x,
                 dy = body.position.y - point.y;
-                
+
             Body.setPosition(body, {
                 x: point.x + (dx * cos - dy * sin),
                 y: point.y + (dx * sin + dy * cos)
@@ -1725,7 +1726,7 @@ var Body = _dereq_('./Body');
             var body = bodies[i],
                 dx = body.position.x - point.x,
                 dy = body.position.y - point.y;
-                
+
             Body.setPosition(body, {
                 x: point.x + dx * scaleX,
                 y: point.y + dy * scaleY
@@ -1890,7 +1891,7 @@ var Body = _dereq_('./Body');
 
 })();
 
-},{"../core/Common":14,"../core/Events":16,"./Body":1}],3:[function(_dereq_,module,exports){
+},{"../core/Common":14,"../core/Events":16,"../geometry/Bounds":26,"./Body":1}],3:[function(_dereq_,module,exports){
 /**
 * The `Matter.World` module contains methods for creating and manipulating the world composite.
 * A `Matter.World` is a `Matter.Composite` body, which is a collection of `Matter.Body`, `Matter.Constraint` and other `Matter.Composite`.
